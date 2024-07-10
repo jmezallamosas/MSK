@@ -26,11 +26,11 @@ for filename in os.listdir(f'{datadir}/raw'):
 
         adata = sc.read_h5ad(file_path)
 
-        sq.gr.spatial_neighbors(adata,radius=50,coord_type='generic',delaunay=True) # Creates spatial_connectivities and spatial_distances in 'obsp' from spatial location (x,y) in 'obsm'
+        sq.gr.spatial_neighbors(adata,n_rings=1,coord_type='grid',delaunay=False) # Creates spatial_connectivities and spatial_distances in 'obsp' from spatial location (x,y) in 'obsm'
 
-        gae = gf.ml.GAE(adata, layers=[50,50], lr=0.05, device=device)#, exponent=2, distance_scale=10)
+        gae = gf.ml.GAE(adata, layers=[50,50], lr=0.0001, device=device)#, exponent=2, distance_scale=10)
 
-        gae.train(5000, update_interval=200, threshold=1e-5)
+        gae.train(10000, update_interval=100, threshold=1e-3, patience=10)
 
         gae.load_embedding(adata, encoding_key="X_grafiti") # Load features into the z latent space
 
@@ -46,7 +46,7 @@ for filename in os.listdir(f'{datadir}/raw'):
 
         ari_dic[filename[:6]] = ari
         
-        adata.write(f'{datadir}/grafiti/'+filename[:6]+'_grafiti.h5ad')
+        adata.write(f'{datadir}/grafiti/'+filename[:6]+'_grafiti_v2.h5ad')
 
-with open(f'{datadir}/grafiti/ari_grafiti.pkl', 'wb') as f:
+with open(f'{datadir}/grafiti/ari_grafiti_v2.pkl', 'wb') as f:
     pickle.dump(ari_dic, f)
