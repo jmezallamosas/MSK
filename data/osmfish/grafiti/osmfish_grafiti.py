@@ -21,6 +21,13 @@ ari_dic = {}
 for i in range(10):
     
     adata = sc.read_h5ad(f'{datadir}/raw/osmfish_remove_excluded.h5ad')
+
+    #Normalization
+    sc.pp.highly_variable_genes(adata, flavor="seurat_v3", n_top_genes=3000)
+    sc.pp.normalize_total(adata, target_sum=1e4)
+    sc.pp.log1p(adata)
+    sc.pp.scale(adata, zero_center=False, max_value=10)
+    adata = adata[:,adata.var['highly_variable']]
     
     sq.gr.spatial_neighbors(adata,radius=50,coord_type='generic',delaunay=True) # Creates spatial_connectivities and spatial_distances in 'obsp' from spatial location (x,y) in 'obsm'
 
@@ -42,7 +49,7 @@ for i in range(10):
 
     ari_dic[i+1] = ari
     
-    adata.write(f'{datadir}/grafiti/osmfish_grafiti_{i+1}_cl.h5ad')
+    adata.write(f'{datadir}/grafiti/osmfish_grafiti_{i+1}_cl_norm.h5ad')
 
-with open(f'{datadir}/grafiti/ari_grafiti_cl.pkl', 'wb') as f:
+with open(f'{datadir}/grafiti/ari_grafiti_cl_norm.pkl', 'wb') as f:
     pickle.dump(ari_dic, f)
