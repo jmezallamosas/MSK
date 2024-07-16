@@ -46,7 +46,7 @@ for filename in os.listdir(f'{datadir}/raw'):
 
         ari_dic[filename[:6]] = ari
         
-        adata.write(f'{datadir}/grafiti/'+filename[:6]+'_grafiti_v2.h5ad')
+        adata.write(f'{datadir}/grafiti/'+filename[:6]+'_grafiti_cl.h5ad')
 
-with open(f'{datadir}/grafiti/ari_grafiti_v2.pkl', 'wb') as f:
+with open(f'{datadir}/grafiti/ari_grafiti_cl.pkl', 'wb') as f:
     pickle.dump(ari_dic, f)

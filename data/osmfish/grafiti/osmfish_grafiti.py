@@ -42,7 +42,7 @@ for i in range(10):
 
     ari_dic[i+1] = ari
     
-    adata.write(f'{datadir}/grafiti/osmfish_grafiti_{i+1}_v2.h5ad')
+    adata.write(f'{datadir}/grafiti/osmfish_grafiti_{i+1}_cl.h5ad')
 
-with open(f'{datadir}/grafiti/ari_grafiti_v2.pkl', 'wb') as f:
+with open(f'{datadir}/grafiti/ari_grafiti_cl.pkl', 'wb') as f:
     pickle.dump(ari_dic, f)
